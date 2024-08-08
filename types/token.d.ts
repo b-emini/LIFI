@@ -3,6 +3,7 @@ export interface Token {
     address: string;
     logoURI: string;
     chainId:number;
+    priceUSD: string;
 }
 
 export interface ApiResponse {
