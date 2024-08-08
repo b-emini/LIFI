@@ -2,32 +2,37 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
-}
-
 body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+  font-family: 'Inter', sans-serif;
+  background-color: #f9fafb;
+  color: #1a202c;
 }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
+.container {
+  @apply max-w-6xl mx-auto px-4 py-8;
+}
+
+.card {
+  @apply bg-white shadow-md rounded-lg p-4 border border-gray-200;
+  transition: transform 0.2s ease-in-out;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+}
+
+.search-input {
+  @apply w-full border border-gray-300 rounded-md p-2 mb-4 focus:outline-none focus:border-blue-500;
+}
+
+.button {
+  @apply px-4 py-2 rounded text-white;
+}
+
+.button-blue {
+  @apply bg-blue-500 hover:bg-blue-600;
+}
+
+.button-red {
+  @apply bg-red-500 hover:bg-red-600;
 }
