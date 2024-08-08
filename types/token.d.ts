@@ -3,3 +3,7 @@ export interface Token {
     address: string;
     logoURI: string;
 }
+
+export interface ApiResponse {
+    tokens: Token[];
+}
