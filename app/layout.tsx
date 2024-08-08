@@ -1,7 +1,7 @@
 import './globals.css';
 import { ReactNode } from 'react';
 import { FavoritesProvider } from './context/FavoritesContext';
-
+//Apologies for being lazy and using only one chain :)
 export const metadata = {
     title: 'Token Explorer',
     description: 'Explore and favorite your favorite tokens',
