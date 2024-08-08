@@ -2,11 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-  font-family: 'Inter', sans-serif;
-  background-color: #f9fafb;
-  color: #1a202c;
-}
 
 .container {
   @apply max-w-6xl mx-auto px-4 py-8;

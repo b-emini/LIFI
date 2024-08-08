@@ -1,3 +1,5 @@
+
+import Image from 'next/image';
 import { Token } from '../../types/token';
 
 interface TokenItemProps {
@@ -6,10 +8,18 @@ interface TokenItemProps {
 
 export default function TokenItem({ token }: TokenItemProps) {
     return (
-        <div className="card hover:bg-gray-100 cursor-pointer transition">
-            <img src={token.logoURI} alt={token.name} className="w-16 h-16 mb-2" />
-            <h2 className="text-xl font-semibold">{token.name}</h2>
-            <p className="text-sm text-gray-500">{token.address}</p>
+        <div className="card bg-white shadow-md rounded-lg p-4 hover:bg-gray-100 cursor-pointer transition transform hover:-translate-y-1 hover:shadow-lg">
+            <h2 className="text-center text-xl font-semibold mb-2">{token.name}</h2>
+            <div className="flex justify-center mb-2">
+                <Image
+                    height={64}
+                    width={64}
+                    src={token.logoURI || ""}
+                    alt={token.name}
+                    className="rounded-full"
+                />
+            </div>
+            <p className="text-center text-xs text-gray-500 truncate">{token.address}</p>
         </div>
     );
 }

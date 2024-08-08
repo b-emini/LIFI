@@ -1,6 +1,4 @@
-// app/page.tsx
 'use client';
-
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Token } from '../types/token';
@@ -10,7 +8,7 @@ import { useFavorites } from './context/FavoritesContext';
 async function fetchTokens(): Promise<Token[]> {
     try {
         const res = await axios.get('https://li.quest/v1/tokens');
-        console.log('API Response:', res.data.tokens["1"]); // Debugging line
+        console.log('API Response:', res.data.tokens["1"]); // Debugging
         // Ensure that res.data.tokens is an array
         if (Array.isArray(res.data.tokens["1"])) {
             return res.data.tokens["1"];
