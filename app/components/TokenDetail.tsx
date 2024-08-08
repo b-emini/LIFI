@@ -56,7 +56,7 @@ export default function TokenDetail({ initialToken }: { initialToken: Token }) {
             {token ? (
                 <div className="bg-white shadow-md rounded-lg p-6 max-w-lg mx-auto">
                     <div className="flex items-center justify-between mb-4">
-                        <h1 className="text-4xl font-extrabold text-gray-900">{token.name + " " + token.priceUSD + "$"}</h1>
+                        <h1 className="text-4xl font-extrabold text-gray-900">{token.name + " : " + token.priceUSD + "$"}</h1>
                         <img
                             src={token.logoURI}
                             alt={token.name}
@@ -71,7 +71,7 @@ export default function TokenDetail({ initialToken }: { initialToken: Token }) {
                         <FavoriteButton
                             isFavorite={favoriteState}
                             toggleFavorite={toggleFavorite}
-                            className="transition transform hover:scale-105 focus:outline-none"
+                            classname="transition transform hover:scale-105 focus:outline-none"
                         />
                     </div>
                 </div>
