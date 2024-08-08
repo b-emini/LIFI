@@ -14,7 +14,7 @@ export default function TokenItem({ token }: TokenItemProps) {
                 <Image
                     height={64}
                     width={64}
-                    src={token.logoURI || ""}
+                    src={token.logoURI || "https://raw.githubusercontent.com/ErikThiart/cryptocurrency-icons/master/16/00-token.png"}
                     alt={token.name}
                     className="rounded-full"
                 />

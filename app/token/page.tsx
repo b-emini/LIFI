@@ -1,32 +1,38 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import axios from 'axios';
-import { Token } from '../../../types/token';
-import FavoriteButton from '../../components/FavoriteButton';
-import { useFavorites } from '../../context/FavoritesContext';
+import FavoriteButton from '../components/FavoriteButton';
+import { useFavorites } from '../context/FavoritesContext';
+import { Token } from '../../types/token';
 
-// Fetch token data
-async function fetchTokenData(id: string): Promise<Token | null> {
-    const res = await axios.get('https://li.quest/v1/tokens');
-    const token = res.data.tokens["1"].find((t: Token) => t.address === id);
-    return token || null;
+// New getToken function using the provided structure
+const getToken = async (chain: string, token: string): Promise<Token | null> => {
+    const result = await axios.get('https://li.quest/v1/token', {
+        params: {
+            chain,
+            token,
+        }
+    });
+    return result.data;
 }
 
 export default function TokenDetail() {
-    const router = useRouter();
+    const searchParams = useSearchParams();
     const { addFavorite, removeFavorite, isFavorite } = useFavorites();
     const [token, setToken] = useState<Token | null>(null);
     const [favoriteState, setFavoriteState] = useState(false);
 
     // Fetch token details
     useEffect(() => {
-        const id = router.query.id as string;
-        if (id) {
-            fetchTokenData(id).then(setToken);
+        const id = searchParams.get('id');
+        const chain = searchParams.get('chain'); // Assuming you have 'chain' as a query parameter
+
+        if (id && chain) {
+            getToken(chain, id).then(setToken);
         }
-    }, [router.query.id]);
+    }, [searchParams]);
 
     // Update favorite state
     useEffect(() => {

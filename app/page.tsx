@@ -1,20 +1,24 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { Token } from '../types/token';
 import TokenList from './components/TokenList';
 import { useFavorites } from './context/FavoritesContext';
 
+const CHUNK_SIZE = 100; // Number of tokens to display at a time
+
 async function fetchTokens(): Promise<Token[]> {
     try {
-        const res = await axios.get('https://li.quest/v1/tokens');
-        console.log('API Response:', res.data.tokens["1"]); // Debugging
-        // Ensure that res.data.tokens is an array
-        if (Array.isArray(res.data.tokens["1"])) {
-            return res.data.tokens["1"];
+        const response = await axios.get('https://li.quest/v1/tokens');
+        console.log('API Response:', response.data.tokens);
+
+        // Ensure tokens is an array
+        if (Array.isArray(response.data.tokens["1"])) {
+            return response.data.tokens["1"];
         }
-        console.error('Tokens data is not an array:', res.data.tokens);
-        return []; // Return an empty array if the tokens data is not valid
+
+        console.error('Tokens data is not an array:', response.data.tokens);
+        return []; // Return empty array if response is invalid
     } catch (error) {
         console.error('Error fetching tokens:', error);
         return [];
@@ -23,14 +27,50 @@ async function fetchTokens(): Promise<Token[]> {
 
 export default function Home() {
     const [tokens, setTokens] = useState<Token[]>([]);
+    const [visibleTokens, setVisibleTokens] = useState<Token[]>([]);
     const [searchTerm, setSearchTerm] = useState('');
     const { favorites } = useFavorites();
+    const [loading, setLoading] = useState(false);
+    const observer = useRef<IntersectionObserver | null>(null);
+    const [page, setPage] = useState(0);
 
     useEffect(() => {
-        fetchTokens().then(setTokens);
+        const loadTokens = async () => {
+            setLoading(true);
+            const allTokens = await fetchTokens();
+            setTokens(allTokens);
+            setVisibleTokens(allTokens.slice(0, CHUNK_SIZE)); // Show first chunk
+            setPage(1); // Start on the first page
+            setLoading(false);
+        };
+
+        loadTokens();
     }, []);
-    // eslint-disable-next-line
-    const filteredTokens = tokens.filter((token) =>
+
+    useEffect(() => {
+        if (loading) return; // If currently loading, do not do anything
+
+        const handleScroll = () => {
+            const { scrollHeight, scrollTop, clientHeight } = document.documentElement;
+            if (scrollHeight - scrollTop <= clientHeight + 1) {
+                loadMoreTokens();
+            }
+        };
+
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, [loading, tokens, visibleTokens]);
+
+    const loadMoreTokens = () => {
+        // Calculate the next range of tokens to display
+        const nextPage = page + 1;
+        const nextTokens = tokens.slice(0, nextPage * CHUNK_SIZE);
+        setVisibleTokens(nextTokens); // Update visible tokens
+        setPage(nextPage); // Increment the page number
+    };
+
+    // Filter and sort tokens based on favorites
+    const filteredTokens = visibleTokens.filter((token) =>
         token.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
@@ -50,6 +90,7 @@ export default function Home() {
                 onChange={(e) => setSearchTerm(e.target.value)}
             />
             <TokenList tokens={sortedTokens} />
+            {loading && <p>Loading more tokens...</p>}
         </div>
     );
 }

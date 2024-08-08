@@ -10,7 +10,7 @@ export default function TokenList({ tokens }: TokenListProps) {
     return (
         <div className="grid grid-cols-4 gap-4">
             {tokens.map((token) => (
-                <Link key={token.address} href={`/token/${token.address}`}>
+                <Link key={token.address} href={`/token?id=${token.address}&chain=${token.chainId}`}>
                     <TokenItem token={token} />
                 </Link>
             ))}
